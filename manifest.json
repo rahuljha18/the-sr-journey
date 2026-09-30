@@ -1,0 +1,25 @@
+{
+  "id": "./",
+  "name": "The SR Journey - Tours & Travels",
+  "short_name": "SR Journey",
+  "description": "Explore Darbhanga, Bihar and destinations across India.",
+  "lang": "en-IN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#023e8a",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "./images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
