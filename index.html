@@ -23,6 +23,9 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#023e8a">
 
+
+
+
 </head>
 
 <body>
@@ -1142,108 +1145,90 @@
 
             </div>
                 <div class="booking-form-container">
-
-    <h3>
-        Send Your Travel Enquiry
-    </h3>
-
+    <h3>🚕 Cab Booking & Payment</h3>
     <form id="bookingForm">
-
-        <input
-            type="text"
-            id="name"
-            placeholder="Your Name"
-            required>
-
-
-        <input
-            type="tel"
-            id="phone"
-            placeholder="Mobile Number"
-            required>
-
-
-        <select
-            id="destination"
-            required>
-
-            <option value="">
-                Select Package
-            </option>
-
-            <option>
-                Darbhanga Local Tour
-            </option>
-
-            <option>
-                Darbhanga - Madhubani
-            </option>
-
-            <option>
-                Sitamarhi - Janakpur
-            </option>
-
-            <option>
-                Darbhanga - Muzaffarpur
-            </option>
-
-            <option>
-                Rajgir - Nalanda
-            </option>
-
-            <option>
-                Darbhanga - Patna
-            </option>
-
-            <option>
-                Darbhanga - Bodh Gaya
-            </option>
-
-            <option>
-                Darbhanga - Valmiki Nagar
-            </option>
-
-            <option>
-                Pawapuri - Rajgir
-            </option>
-
-            <option>
-                Darbhanga - Varanasi
-            </option>
-
-        </select>
-
-
-        <input
-            type="date"
-            id="date"
-            required>
-
-
-        <input
-            type="number"
-            id="people"
-            placeholder="Number of People"
-            min="1"
-            required>
-
-
-        <textarea
-            id="message"
-            rows="4"
-            placeholder="Any special requirement?"></textarea>
-
-
-        <button
-            type="submit"
-            class="book-btn">
-
-            Send Enquiry on WhatsApp
-
-        </button>
-
+        <div class="booking-grid">
+            <div class="booking-field">
+                <label for="name">Your Name *</label>
+                <input type="text" id="name" placeholder="Your Name" required>
+            </div>
+            <div class="booking-field">
+                <label for="phone">Mobile Number *</label>
+                <input type="tel" id="phone" placeholder="Mobile Number" inputmode="numeric" pattern="[0-9+\-\s]{10,15}" required>
+            </div>
+            <div class="booking-field">
+                <label for="destination">Select Package *</label>
+                <select id="destination" required>
+                    <option value="">Select Package</option>
+                    <option value="Darbhanga Local Tour">Darbhanga Local Tour</option>
+                    <option value="Darbhanga - Madhubani">Darbhanga - Madhubani</option>
+                    <option value="Sitamarhi - Janakpur">Sitamarhi - Janakpur</option>
+                    <option value="Darbhanga - Muzaffarpur">Darbhanga - Muzaffarpur</option>
+                    <option value="Rajgir - Nalanda">Rajgir - Nalanda</option>
+                    <option value="Darbhanga - Patna">Darbhanga - Patna</option>
+                    <option value="Darbhanga - Bodh Gaya">Darbhanga - Bodh Gaya</option>
+                    <option value="Darbhanga - Valmiki Nagar">Darbhanga - Valmiki Nagar</option>
+                    <option value="Pawapuri - Rajgir">Pawapuri - Rajgir</option>
+                    <option value="Darbhanga - Varanasi">Darbhanga - Varanasi</option>
+                </select>
+            </div>
+            <div class="booking-field">
+                <label for="date">Travel Date *</label>
+                <input type="date" id="date" required>
+            </div>
+            <div class="booking-field">
+                <label for="people">Number of Passengers *</label>
+                <input type="number" id="people" placeholder="Number of People" min="1" max="17" value="1" required>
+            </div>
+            <div class="booking-field">
+                <label for="cabCategory">Cab Category *</label>
+                <select id="cabCategory" required>
+                    <option value="">Select Cab Category</option>
+                    <option value="hatchback">🚗 Hatchback — 4 seats</option>
+                    <option value="sedan">🚘 Sedan — 4 seats</option>
+                    <option value="suv">🚙 SUV — 6 seats</option>
+                    <option value="premium">✨ Premium SUV — 6 seats</option>
+                    <option value="tempo">🚌 Tempo Traveller — 12 seats</option>
+                </select>
+            </div>
+            <div class="booking-field full">
+                <label>Cab Options</label>
+                <div class="cab-options">
+                    <div class="cab-option"><input type="radio" id="cab-hatchback" name="cabChoice" value="hatchback"><label for="cab-hatchback"><span class="cab-option-title">🚗 Hatchback</span><span class="cab-option-meta">Up to 4 passengers · Economy</span></label></div>
+                    <div class="cab-option"><input type="radio" id="cab-sedan" name="cabChoice" value="sedan"><label for="cab-sedan"><span class="cab-option-title">🚘 Sedan</span><span class="cab-option-meta">Up to 4 passengers · Comfort</span></label></div>
+                    <div class="cab-option"><input type="radio" id="cab-suv" name="cabChoice" value="suv"><label for="cab-suv"><span class="cab-option-title">🚙 SUV</span><span class="cab-option-meta">Up to 6 passengers · Family</span></label></div>
+                    <div class="cab-option"><input type="radio" id="cab-premium" name="cabChoice" value="premium"><label for="cab-premium"><span class="cab-option-title">✨ Premium SUV</span><span class="cab-option-meta">Up to 6 passengers · Premium</span></label></div>
+                    <div class="cab-option"><input type="radio" id="cab-tempo" name="cabChoice" value="tempo"><label for="cab-tempo"><span class="cab-option-title">🚌 Tempo Traveller</span><span class="cab-option-meta">Up to 12 passengers · Group travel</span></label></div>
+                </div>
+            </div>
+            <div class="booking-field full">
+                <label>Payment Method *</label>
+                <div class="payment-options">
+                    <div class="payment-option"><input type="radio" id="pay-upi" name="paymentMethod" value="UPI"><label for="pay-upi">📱 UPI</label></div>
+                    <div class="payment-option"><input type="radio" id="pay-cash" name="paymentMethod" value="Cash to Driver"><label for="pay-cash">💵 Cash to Driver</label></div>
+                    <div class="payment-option"><input type="radio" id="pay-bank" name="paymentMethod" value="Bank Transfer"><label for="pay-bank">🏦 Bank Transfer</label></div>
+                    <div class="payment-option"><input type="radio" id="pay-online" name="paymentMethod" value="Online Payment"><label for="pay-online">💳 Online Payment</label></div>
+                </div>
+                <div class="payment-note">Online payment is not connected to a payment gateway yet. The selected method will be sent to WhatsApp for confirmation.</div>
+            </div>
+            <div class="booking-field full">
+                <label for="message">Special Requirement</label>
+                <textarea id="message" rows="4" placeholder="Pickup point, luggage, child seat, hotel requirement, etc."></textarea>
+            </div>
+        </div>
+        <div class="booking-summary" id="bookingSummary">
+            <h4>💰 Booking Summary</h4>
+            <div class="summary-row"><span>Package</span><strong id="summaryPackage">-</strong></div>
+            <div class="summary-row"><span>Cab</span><strong id="summaryCab">-</strong></div>
+            <div class="summary-row"><span>Passengers</span><strong id="summaryPeople">0</strong></div>
+            <div class="summary-row"><span>Package Fare</span><strong id="summaryBase">₹0</strong></div>
+            <div class="summary-row"><span>Cab Supplement</span><strong id="summaryCabExtra">₹0</strong></div>
+            <div class="summary-row total"><span>Estimated Total</span><strong id="summaryTotal">₹0</strong></div>
+            <div class="payment-note">Final fare is subject to availability, route, inclusions and partner-operator confirmation.</div>
+        </div>
+        <button type="submit" class="book-btn" style="margin-top:16px;">Send Booking on WhatsApp</button>
+        <div id="bookingStatus" class="booking-status" aria-live="polite"></div>
     </form>
-
 </div>
         </div>
 
