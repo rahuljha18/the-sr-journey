@@ -1427,6 +1427,70 @@
 
     <script src="script.js"></script>
 
+
+<!-- ================= BOOKING CONFIRMATION + VOUCHER MODAL ================= -->
+<div id="voucherModal" class="voucher-modal" aria-hidden="true">
+    <div class="voucher-modal-backdrop" data-close-voucher></div>
+
+    <div class="voucher-dialog" role="dialog" aria-modal="true" aria-labelledby="voucherTitle">
+        <div class="voucher-actions">
+            <button type="button" class="voucher-close" id="closeVoucher" aria-label="Close">✕</button>
+        </div>
+
+        <div id="voucherPrintArea" class="booking-voucher">
+            <div class="voucher-header">
+                <div>
+                    <div class="voucher-brand">THE SR JOURNEY</div>
+                    <div class="voucher-subtitle">Tours & Travels</div>
+                </div>
+                <div class="voucher-status" id="voucherStatus">ENQUIRY RECEIVED</div>
+            </div>
+
+            <div class="voucher-title-row">
+                <div>
+                    <div class="voucher-kicker" id="voucherType">BOOKING CONFIRMATION</div>
+                    <h2 id="voucherTitle">Booking Voucher</h2>
+                </div>
+                <div class="voucher-id-box">
+                    <span>Booking ID</span>
+                    <strong id="voucherId">SRJ-000000</strong>
+                </div>
+            </div>
+
+            <div class="voucher-grid">
+                <div><span>Customer</span><strong id="voucherCustomer">-</strong></div>
+                <div><span>Mobile</span><strong id="voucherPhone">-</strong></div>
+                <div><span>Service</span><strong id="voucherService">-</strong></div>
+                <div><span>Travel Date</span><strong id="voucherDate">-</strong></div>
+            </div>
+
+            <div class="voucher-details" id="voucherDetails"></div>
+
+            <div class="voucher-total-row">
+                <span>Estimated Total</span>
+                <strong id="voucherTotal">₹0</strong>
+            </div>
+
+            <div class="voucher-note">
+                <strong>Important:</strong>
+                This voucher confirms receipt of the booking/enquiry request.
+                Vehicle/hotel availability, final fare, inclusions and payment confirmation
+                remain subject to The SR Journey and partner-operator confirmation.
+            </div>
+
+            <div class="voucher-footer">
+                <span>📱 +91 7979001521</span>
+                <span>📍 Darbhanga, Bihar, India</span>
+            </div>
+        </div>
+
+        <div class="voucher-button-row">
+            <button type="button" class="btn primary-btn" id="printVoucher">🖨️ Print / Save PDF</button>
+            <button type="button" class="btn whatsapp-btn" id="sendVoucherWhatsApp">📱 Send on WhatsApp</button>
+        </div>
+    </div>
+</div>
+
 </body>
 
 </html>

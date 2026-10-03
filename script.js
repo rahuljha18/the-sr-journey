@@ -235,13 +235,31 @@ if (bookingForm) {
             "📝 Special Requirement: " + (message || "None") +
             "\n\nPlease confirm vehicle availability, final fare, inclusions and payment instructions.";
 
-        const whatsappURL = "https://wa.me/" + WHATSAPP_NUMBER +
-            "?text=" + encodeURIComponent(whatsappMessage);
+        const bookingId = generateBookingId("SRJ");
+
+        showBookingVoucher({
+            id: bookingId,
+            type: "BOOKING CONFIRMATION",
+            status: "ENQUIRY RECEIVED",
+            title: "Tour Booking Voucher",
+            customer: name,
+            phone: phone,
+            service: calculation.packageName,
+            date: date,
+            total: calculation.total,
+            details: [
+                ["Passengers", calculation.people],
+                ["Cab Category", calculation.cab.name],
+                ["Package Fare", formatINR(calculation.packageFare)],
+                ["Cab Supplement", formatINR(calculation.cabExtra)],
+                ["Payment Method", paymentElement.value],
+                ["Special Requirement", message || "None"]
+            ],
+            whatsappMessage: whatsappMessage + "\n\n🎟️ Booking ID: " + bookingId
+        });
 
         const status = document.getElementById("bookingStatus");
-        if (status) status.textContent = "Opening WhatsApp with your booking details...";
-
-        window.open(whatsappURL, "_blank");
+        if (status) status.textContent = "Booking request created. Booking ID: " + bookingId;
     });
 
     updateBookingSummary();
@@ -416,15 +434,30 @@ function setupCabOnlyForm() {
             "📝 Requirement: " + (requirement || "None") +
             "\n\nPlease confirm vehicle availability and final fare.";
 
+        showBookingVoucher({
+            id: bookingId,
+            type: "CAB BOOKING CONFIRMATION",
+            status: "REQUEST RECEIVED",
+            title: "Cab Booking Voucher",
+            customer: name,
+            phone: phone,
+            service: "Cab Booking",
+            date: date + " " + time,
+            total: 0,
+            details: [
+                ["Pickup", pickup],
+                ["Drop", drop],
+                ["Passengers", passengers],
+                ["Cab Category", cab],
+                ["Special Requirement", requirement || "None"]
+            ],
+            whatsappMessage: message
+        });
+
         const status = document.getElementById("cabStatus");
         if (status) {
-            status.textContent = "Booking ID " + bookingId + " created. Opening WhatsApp...";
+            status.textContent = "Booking request created. Booking ID: " + bookingId;
         }
-
-        window.open(
-            "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message),
-            "_blank"
-        );
     });
 }
 
@@ -472,15 +505,30 @@ function setupHotelForm() {
             "📝 Requirement: " + (requirement || "None") +
             "\n\nPlease share available hotels, room rates and booking terms.";
 
+        showBookingVoucher({
+            id: bookingId,
+            type: "HOTEL ENQUIRY",
+            status: "ENQUIRY RECEIVED",
+            title: "Hotel Enquiry Voucher",
+            customer: name,
+            phone: phone,
+            service: "Hotel Booking Enquiry",
+            date: checkIn + " to " + checkOut,
+            total: 0,
+            details: [
+                ["Destination", destination],
+                ["Rooms", rooms],
+                ["Guests", guests],
+                ["Budget / Night", budget || "Any"],
+                ["Room Requirement", requirement || "None"]
+            ],
+            whatsappMessage: message
+        });
+
         const status = document.getElementById("hotelStatus");
         if (status) {
-            status.textContent = "Enquiry ID " + bookingId + " created. Opening WhatsApp...";
+            status.textContent = "Enquiry created. Enquiry ID: " + bookingId;
         }
-
-        window.open(
-            "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message),
-            "_blank"
-        );
     });
 }
 
@@ -499,5 +547,109 @@ document.addEventListener("DOMContentLoaded", function() {
     ["cabDate", "checkIn", "checkOut", "date"].forEach(function(id) {
         const input = document.getElementById(id);
         if (input) input.min = today;
+    });
+});
+
+
+/* =========================================
+   PHASE 2 - BOOKING CONFIRMATION + VOUCHER
+   ========================================= */
+
+let currentVoucherWhatsAppMessage = "";
+
+function showBookingVoucher(data) {
+    const modal = document.getElementById("voucherModal");
+    if (!modal) return;
+
+    currentVoucherWhatsAppMessage = data.whatsappMessage || "";
+
+    document.getElementById("voucherType").textContent = data.type || "BOOKING CONFIRMATION";
+    document.getElementById("voucherTitle").textContent = data.title || "Booking Voucher";
+    document.getElementById("voucherStatus").textContent = data.status || "ENQUIRY RECEIVED";
+    document.getElementById("voucherId").textContent = data.id || "-";
+    document.getElementById("voucherCustomer").textContent = data.customer || "-";
+    document.getElementById("voucherPhone").textContent = data.phone || "-";
+    document.getElementById("voucherService").textContent = data.service || "-";
+    document.getElementById("voucherDate").textContent = data.date || "-";
+    document.getElementById("voucherTotal").textContent = formatINR(data.total || 0);
+
+    const details = document.getElementById("voucherDetails");
+    details.innerHTML = "";
+
+    (data.details || []).forEach(function(item) {
+        const row = document.createElement("div");
+        row.className = "voucher-detail-row";
+
+        const label = document.createElement("span");
+        label.textContent = item[0];
+
+        const value = document.createElement("strong");
+        value.textContent = item[1];
+
+        row.appendChild(label);
+        row.appendChild(value);
+        details.appendChild(row);
+    });
+
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+function closeBookingVoucher() {
+    const modal = document.getElementById("voucherModal");
+    if (!modal) return;
+
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+}
+
+function sendCurrentVoucherToWhatsApp() {
+    if (!currentVoucherWhatsAppMessage) return;
+
+    const bookingId = document.getElementById("voucherId").textContent;
+
+    const finalMessage =
+        currentVoucherWhatsAppMessage +
+        "\n\n🎟️ Booking/Enquiry ID: " + bookingId +
+        "\n\nPlease confirm availability, final fare and next steps.";
+
+    const url =
+        "https://wa.me/" +
+        WHATSAPP_NUMBER +
+        "?text=" +
+        encodeURIComponent(finalMessage);
+
+    window.open(url, "_blank");
+}
+
+function printBookingVoucher() {
+    window.print();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const closeButton = document.getElementById("closeVoucher");
+    const printButton = document.getElementById("printVoucher");
+    const whatsappButton = document.getElementById("sendVoucherWhatsApp");
+
+    if (closeButton) {
+        closeButton.addEventListener("click", closeBookingVoucher);
+    }
+
+    if (printButton) {
+        printButton.addEventListener("click", printBookingVoucher);
+    }
+
+    if (whatsappButton) {
+        whatsappButton.addEventListener("click", sendCurrentVoucherToWhatsApp);
+    }
+
+    document.querySelectorAll("[data-close-voucher]").forEach(function(element) {
+        element.addEventListener("click", closeBookingVoucher);
+    });
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") closeBookingVoucher();
     });
 });
