@@ -155,12 +155,42 @@
         </div>
 
 
+        
+        <div class="package-filter" id="packageFilter">
+            <div class="filter-field">
+                <label for="packageSearch">🔎 Destination</label>
+                <input type="search" id="packageSearch" placeholder="Search destination...">
+            </div>
+            <div class="filter-field">
+                <label for="durationFilter">📅 Duration</label>
+                <select id="durationFilter">
+                    <option value="">All Durations</option>
+                    <option value="1">1 Day</option>
+                    <option value="2">2 Days</option>
+                    <option value="3">3 Days</option>
+                </select>
+            </div>
+            <div class="filter-field">
+                <label for="budgetFilter">💰 Max Budget / Person</label>
+                <select id="budgetFilter">
+                    <option value="">Any Budget</option>
+                    <option value="1500">Up to ₹1,500</option>
+                    <option value="3000">Up to ₹3,000</option>
+                    <option value="5000">Up to ₹5,000</option>
+                    <option value="7000">Up to ₹7,000</option>
+                </select>
+            </div>
+            <button type="button" class="filter-reset" id="resetPackageFilter">Reset</button>
+        </div>
+        <div class="filter-result-count" id="packageResultCount">Showing all packages</div>
+
+
         <div class="packages-container">
 
 
             <!-- PACKAGE 1 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Darbhanga Local Tour" data-duration="1" data-price="999">
 
                 <div class="package-image">
                     🏙️
@@ -230,7 +260,7 @@
 
             <!-- PACKAGE 2 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Darbhanga – Madhubani" data-duration="1" data-price="1299">
 
                 <div class="package-image">
                     🏛️
@@ -294,7 +324,7 @@
 
             <!-- PACKAGE 3 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Sitamarhi – Janakpur" data-duration="2" data-price="3999">
 
                 <div class="package-image">
                     🛕
@@ -355,7 +385,7 @@
 
             <!-- PACKAGE 4 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Darbhanga – Muzaffarpur" data-duration="1" data-price="1499">
 
                 <div class="package-image">
                     🌆
@@ -419,7 +449,7 @@
 
             <!-- PACKAGE 5 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Rajgir – Nalanda" data-duration="2" data-price="3499">
 
                 <div class="package-image">
                     🏞️
@@ -479,7 +509,7 @@
 
             <!-- PACKAGE 6 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Darbhanga – Patna" data-duration="2" data-price="3499">
 
                 <div class="package-image">
                     🏙️
@@ -539,7 +569,7 @@
 
             <!-- PACKAGE 7 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Darbhanga – Bodh Gaya" data-duration="2" data-price="4499">
 
                 <div class="package-image">
                     🛕
@@ -599,7 +629,7 @@
 
             <!-- PACKAGE 8 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Darbhanga – Valmiki Nagar" data-duration="2" data-price="4999">
 
                 <div class="package-image">
                     🌳
@@ -659,7 +689,7 @@
 
             <!-- PACKAGE 9 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Pawapuri – Rajgir" data-duration="2" data-price="3999">
 
                 <div class="package-image">
                     🏔️
@@ -719,7 +749,7 @@
 
             <!-- PACKAGE 10 -->
 
-            <div class="package-card">
+            <div class="package-card" data-package-name="Darbhanga – Varanasi" data-duration="3" data-price="6999">
 
                 <div class="package-image">
                     🛕
@@ -804,23 +834,23 @@
 
         <div class="services-container">
 
-            <div class="service-card">
+            <a class="service-card service-card-link" href="#cab-booking">
                 <div>🚕</div>
                 <h3>Cab Booking</h3>
                 <p>
                     Local and outstation cab
                     booking assistance.
                 </p>
-            </div>
+            </a>
 
-            <div class="service-card">
+            <a class="service-card service-card-link" href="#hotel-booking">
                 <div>🏨</div>
                 <h3>Hotel Booking</h3>
                 <p>
                     Hotel booking assistance
                     for your journey.
                 </p>
-            </div>
+            </a>
 
             <div class="service-card">
                 <div>🧳</div>
@@ -842,6 +872,134 @@
 
         </div>
 
+    </section>
+
+
+    <!-- ================= PHASE 1: CAB + HOTEL ================= -->
+
+    <section id="cab-booking" class="section booking-tools-section">
+        <div class="section-title">
+            <p>TRAVEL SERVICES</p>
+            <h2>Book a Cab</h2>
+            <span>Need only a vehicle? Send your pickup and drop details and we will confirm the partner cab and fare.</span>
+        </div>
+
+        <div class="service-booking-card">
+            <form id="cabOnlyForm">
+                <div class="booking-grid">
+                    <div class="booking-field">
+                        <label for="cabName">Your Name *</label>
+                        <input type="text" id="cabName" placeholder="Your Name" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="cabPhone">Mobile Number *</label>
+                        <input type="tel" id="cabPhone" placeholder="Mobile Number" inputmode="numeric" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="cabPickup">Pickup Location *</label>
+                        <input type="text" id="cabPickup" placeholder="Pickup location" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="cabDrop">Drop Location *</label>
+                        <input type="text" id="cabDrop" placeholder="Drop location" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="cabDate">Travel Date *</label>
+                        <input type="date" id="cabDate" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="cabTime">Pickup Time *</label>
+                        <input type="time" id="cabTime" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="cabPassengers">Passengers *</label>
+                        <input type="number" id="cabPassengers" min="1" max="12" value="1" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="cabType">Cab Category *</label>
+                        <select id="cabType" required>
+                            <option value="">Select Cab</option>
+                            <option value="Hatchback">Hatchback — up to 4</option>
+                            <option value="Sedan">Sedan — up to 4</option>
+                            <option value="SUV">SUV — up to 6</option>
+                            <option value="Premium SUV">Premium SUV — up to 6</option>
+                            <option value="Tempo Traveller">Tempo Traveller — up to 12</option>
+                        </select>
+                    </div>
+                    <div class="booking-field full">
+                        <label for="cabRequirement">Special Requirement</label>
+                        <textarea id="cabRequirement" rows="3" placeholder="Luggage, child seat, round trip, multiple stops, etc."></textarea>
+                    </div>
+                </div>
+                <div class="quote-box">
+                    <strong>Fare:</strong> Final cab fare will be confirmed after route, vehicle availability and partner-operator rate verification.
+                </div>
+                <button type="submit" class="book-btn">🚕 Request Cab on WhatsApp</button>
+                <div id="cabStatus" class="booking-status" aria-live="polite"></div>
+            </form>
+        </div>
+    </section>
+
+    <section id="hotel-booking" class="section booking-tools-section">
+        <div class="section-title">
+            <p>STAY WITH US</p>
+            <h2>Hotel Booking Enquiry</h2>
+            <span>Tell us your stay requirements and we will check suitable hotel options.</span>
+        </div>
+
+        <div class="service-booking-card">
+            <form id="hotelForm">
+                <div class="booking-grid">
+                    <div class="booking-field">
+                        <label for="hotelName">Your Name *</label>
+                        <input type="text" id="hotelName" placeholder="Your Name" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="hotelPhone">Mobile Number *</label>
+                        <input type="tel" id="hotelPhone" placeholder="Mobile Number" inputmode="numeric" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="hotelDestination">Destination / City *</label>
+                        <input type="text" id="hotelDestination" placeholder="e.g. Darbhanga" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="hotelRooms">Rooms *</label>
+                        <input type="number" id="hotelRooms" min="1" max="20" value="1" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="checkIn">Check-in *</label>
+                        <input type="date" id="checkIn" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="checkOut">Check-out *</label>
+                        <input type="date" id="checkOut" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="hotelGuests">Guests *</label>
+                        <input type="number" id="hotelGuests" min="1" max="50" value="1" required>
+                    </div>
+                    <div class="booking-field">
+                        <label for="hotelBudget">Approx. Budget / Night</label>
+                        <select id="hotelBudget">
+                            <option value="">Any Budget</option>
+                            <option>Up to ₹1,500</option>
+                            <option>₹1,500 – ₹3,000</option>
+                            <option>₹3,000 – ₹5,000</option>
+                            <option>₹5,000+</option>
+                        </select>
+                    </div>
+                    <div class="booking-field full">
+                        <label for="hotelRequirement">Room Requirement</label>
+                        <textarea id="hotelRequirement" rows="3" placeholder="AC/non-AC, family room, breakfast, parking, preferred hotel, etc."></textarea>
+                    </div>
+                </div>
+                <div class="quote-box">
+                    <strong>Hotel enquiry:</strong> Availability and final room rate will be confirmed after checking the requested dates.
+                </div>
+                <button type="submit" class="book-btn">🏨 Send Hotel Enquiry on WhatsApp</button>
+                <div id="hotelStatus" class="booking-status" aria-live="polite"></div>
+            </form>
+        </div>
     </section>
 
     <!-- ================= GALLERY ================= -->

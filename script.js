@@ -295,3 +295,209 @@ if (installButton) {
         installButton.hidden = true;
     });
 }
+
+/* =========================================
+   PHASE 1 - PACKAGE FILTER
+   ========================================= */
+
+function setupPackageFilters() {
+    const search = document.getElementById("packageSearch");
+    const duration = document.getElementById("durationFilter");
+    const budget = document.getElementById("budgetFilter");
+    const reset = document.getElementById("resetPackageFilter");
+    const count = document.getElementById("packageResultCount");
+    const cards = Array.from(document.querySelectorAll(".package-card"));
+
+    if (!search || !duration || !budget || !reset || !cards.length) return;
+
+    function applyFilters() {
+        const query = search.value.trim().toLowerCase();
+        const selectedDuration = duration.value;
+        const maxBudget = Number(budget.value || 0);
+        let visible = 0;
+
+        cards.forEach(function(card) {
+            const name = (card.dataset.packageName || card.textContent).toLowerCase();
+            const cardDuration = card.dataset.duration || "";
+            const price = Number(card.dataset.price || 0);
+
+            const matchesSearch = !query || name.includes(query);
+            const matchesDuration = !selectedDuration || cardDuration === selectedDuration;
+            const matchesBudget = !maxBudget || price <= maxBudget;
+            const show = matchesSearch && matchesDuration && matchesBudget;
+
+            card.classList.toggle("is-hidden", !show);
+            if (show) visible++;
+        });
+
+        count.textContent = visible === cards.length
+            ? "Showing all " + visible + " packages"
+            : "Showing " + visible + " of " + cards.length + " packages";
+    }
+
+    [search, duration, budget].forEach(function(element) {
+        element.addEventListener("input", applyFilters);
+        element.addEventListener("change", applyFilters);
+    });
+
+    reset.addEventListener("click", function() {
+        search.value = "";
+        duration.value = "";
+        budget.value = "";
+        applyFilters();
+    });
+
+    applyFilters();
+}
+
+
+/* =========================================
+   PHASE 1 - BOOKING ID
+   ========================================= */
+
+function generateBookingId(prefix) {
+    const now = new Date();
+    const datePart = String(now.getFullYear()).slice(-2) +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        String(now.getDate()).padStart(2, "0");
+    const randomPart = Math.floor(1000 + Math.random() * 9000);
+    return (prefix || "SRJ") + "-" + datePart + "-" + randomPart;
+}
+
+
+/* =========================================
+   PHASE 1 - CAB ONLY BOOKING
+   ========================================= */
+
+function setupCabOnlyForm() {
+    const form = document.getElementById("cabOnlyForm");
+    if (!form) return;
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("cabName").value.trim();
+        const phone = document.getElementById("cabPhone").value.trim();
+        const pickup = document.getElementById("cabPickup").value.trim();
+        const drop = document.getElementById("cabDrop").value.trim();
+        const date = document.getElementById("cabDate").value;
+        const time = document.getElementById("cabTime").value;
+        const passengers = Number(document.getElementById("cabPassengers").value);
+        const cab = document.getElementById("cabType").value;
+        const requirement = document.getElementById("cabRequirement").value.trim();
+
+        const capacity = {
+            "Hatchback": 4,
+            "Sedan": 4,
+            "SUV": 6,
+            "Premium SUV": 6,
+            "Tempo Traveller": 12
+        };
+
+        if (capacity[cab] && passengers > capacity[cab]) {
+            alert(cab + " has capacity for up to " + capacity[cab] + " passengers.");
+            return;
+        }
+
+        const bookingId = generateBookingId("CAB");
+
+        const message =
+            "Hello The SR Journey! 👋\n\n" +
+            "🚕 CAB BOOKING REQUEST\n\n" +
+            "🎟️ Booking ID: " + bookingId + "\n" +
+            "👤 Name: " + name + "\n" +
+            "📱 Mobile: " + phone + "\n" +
+            "📍 Pickup: " + pickup + "\n" +
+            "📍 Drop: " + drop + "\n" +
+            "📅 Date: " + date + "\n" +
+            "⏰ Pickup Time: " + time + "\n" +
+            "👥 Passengers: " + passengers + "\n" +
+            "🚗 Cab Category: " + cab + "\n" +
+            "📝 Requirement: " + (requirement || "None") +
+            "\n\nPlease confirm vehicle availability and final fare.";
+
+        const status = document.getElementById("cabStatus");
+        if (status) {
+            status.textContent = "Booking ID " + bookingId + " created. Opening WhatsApp...";
+        }
+
+        window.open(
+            "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message),
+            "_blank"
+        );
+    });
+}
+
+
+/* =========================================
+   PHASE 1 - HOTEL ENQUIRY
+   ========================================= */
+
+function setupHotelForm() {
+    const form = document.getElementById("hotelForm");
+    if (!form) return;
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("hotelName").value.trim();
+        const phone = document.getElementById("hotelPhone").value.trim();
+        const destination = document.getElementById("hotelDestination").value.trim();
+        const rooms = document.getElementById("hotelRooms").value;
+        const checkIn = document.getElementById("checkIn").value;
+        const checkOut = document.getElementById("checkOut").value;
+        const guests = document.getElementById("hotelGuests").value;
+        const budget = document.getElementById("hotelBudget").value;
+        const requirement = document.getElementById("hotelRequirement").value.trim();
+
+        if (new Date(checkOut) <= new Date(checkIn)) {
+            alert("Check-out date must be after check-in date.");
+            return;
+        }
+
+        const bookingId = generateBookingId("HTL");
+
+        const message =
+            "Hello The SR Journey! 👋\n\n" +
+            "🏨 HOTEL BOOKING ENQUIRY\n\n" +
+            "🎟️ Enquiry ID: " + bookingId + "\n" +
+            "👤 Name: " + name + "\n" +
+            "📱 Mobile: " + phone + "\n" +
+            "📍 Destination: " + destination + "\n" +
+            "🛏️ Rooms: " + rooms + "\n" +
+            "📅 Check-in: " + checkIn + "\n" +
+            "📅 Check-out: " + checkOut + "\n" +
+            "👥 Guests: " + guests + "\n" +
+            "💰 Budget/Night: " + (budget || "Any") + "\n" +
+            "📝 Requirement: " + (requirement || "None") +
+            "\n\nPlease share available hotels, room rates and booking terms.";
+
+        const status = document.getElementById("hotelStatus");
+        if (status) {
+            status.textContent = "Enquiry ID " + bookingId + " created. Opening WhatsApp...";
+        }
+
+        window.open(
+            "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message),
+            "_blank"
+        );
+    });
+}
+
+
+/* =========================================
+   PHASE 1 - INITIALIZE
+   ========================================= */
+
+document.addEventListener("DOMContentLoaded", function() {
+    setupPackageFilters();
+    setupCabOnlyForm();
+    setupHotelForm();
+
+    // Prevent selecting a past date for the new service forms.
+    const today = new Date().toISOString().split("T")[0];
+    ["cabDate", "checkIn", "checkOut", "date"].forEach(function(id) {
+        const input = document.getElementById(id);
+        if (input) input.min = today;
+    });
+});
