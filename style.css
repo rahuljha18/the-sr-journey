@@ -1616,8 +1616,14 @@ button {
         background: #ffffff !important;
     }
 
-    body * {
-        visibility: hidden !important;
+    /* Remove the entire website from the print layout.
+       visibility:hidden is not enough because hidden elements still occupy pages. */
+    body > :not(#voucherModal) {
+        display: none !important;
+    }
+
+    body > #voucherModal {
+        display: block !important;
     }
 
     #voucherModal,
