@@ -172,6 +172,49 @@ function updateBookingSummary() {
     return { packageName, people, cab, packageFare, cabExtra, total };
 }
 
+
+/* =========================================
+   PHASE 3 - DJANGO BACKEND CONNECTION
+   ========================================= */
+
+// Local Django API for development/testing.
+// Change this to your deployed backend URL before production launch.
+const BACKEND_API_URL = "http://127.0.0.1:8000/api";
+
+async function saveBookingToBackend(payload) {
+    try {
+        const response = await fetch(BACKEND_API_URL + "/bookings/create/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json().catch(function() { return {}; });
+
+        if (!response.ok) {
+            throw new Error(data.detail || data.message || "Backend booking save failed.");
+        }
+
+        console.log("Booking saved to Django backend:", data);
+        return { success: true, data: data };
+    } catch (error) {
+        console.error("Backend booking save failed:", error);
+        return { success: false, error: error };
+    }
+}
+
+function showBackendSaveWarning(result) {
+    if (!result.success) {
+        alert(
+            "Booking voucher is ready, but the booking could not be saved to the backend.\n\n" +
+            "Please make sure Django server is running and try again.\n\n" +
+            "WhatsApp sending is still available from the voucher."
+        );
+    }
+}
+
 const bookingForm = document.getElementById("bookingForm");
 
 if (bookingForm) {
@@ -193,7 +236,7 @@ if (bookingForm) {
         });
     });
 
-    bookingForm.addEventListener("submit", function(event) {
+    bookingForm.addEventListener("submit", async function(event) {
         event.preventDefault();
 
         const calculation = updateBookingSummary();
@@ -237,6 +280,21 @@ if (bookingForm) {
 
         const bookingId = generateBookingId("SRJ");
 
+        const backendResult = await saveBookingToBackend({
+            booking_id: bookingId,
+            customer_name: name,
+            mobile: phone,
+            service_type: "Package Booking",
+            package_name: calculation.packageName,
+            travel_date: date || null,
+            passengers: calculation.people,
+            cab_category: calculation.cab.name,
+            pickup_location: "",
+            drop_location: "",
+            amount: calculation.total,
+            special_requirement: (message || "None") + " | Payment Method: " + paymentElement.value
+        });
+
         showBookingVoucher({
             id: bookingId,
             type: "BOOKING CONFIRMATION",
@@ -258,8 +316,12 @@ if (bookingForm) {
             whatsappMessage: whatsappMessage + "\n\n🎟️ Booking ID: " + bookingId
         });
 
+        showBackendSaveWarning(backendResult);
+
         const status = document.getElementById("bookingStatus");
-        if (status) status.textContent = "Booking request created. Booking ID: " + bookingId;
+        if (status) status.textContent = backendResult.success
+            ? "Booking saved successfully. Booking ID: " + bookingId
+            : "Booking voucher created. Backend save failed. Booking ID: " + bookingId;
     });
 
     updateBookingSummary();
@@ -391,7 +453,7 @@ function setupCabOnlyForm() {
     const form = document.getElementById("cabOnlyForm");
     if (!form) return;
 
-    form.addEventListener("submit", function(event) {
+    form.addEventListener("submit", async function(event) {
         event.preventDefault();
 
         const name = document.getElementById("cabName").value.trim();
@@ -418,6 +480,21 @@ function setupCabOnlyForm() {
         }
 
         const bookingId = generateBookingId("CAB");
+
+        const backendResult = await saveBookingToBackend({
+            booking_id: bookingId,
+            customer_name: name,
+            mobile: phone,
+            service_type: "Cab Booking",
+            package_name: "",
+            travel_date: date || null,
+            passengers: passengers || 1,
+            cab_category: cab,
+            pickup_location: pickup,
+            drop_location: drop,
+            amount: 0,
+            special_requirement: (requirement || "None") + " | Pickup Time: " + (time || "Not specified")
+        });
 
         const message =
             "Hello The SR Journey! 👋\n\n" +
@@ -454,9 +531,13 @@ function setupCabOnlyForm() {
             whatsappMessage: message
         });
 
+        showBackendSaveWarning(backendResult);
+
         const status = document.getElementById("cabStatus");
         if (status) {
-            status.textContent = "Booking request created. Booking ID: " + bookingId;
+            status.textContent = backendResult.success
+                ? "Booking saved successfully. Booking ID: " + bookingId
+                : "Voucher created. Backend save failed. Booking ID: " + bookingId;
         }
     });
 }
@@ -470,7 +551,7 @@ function setupHotelForm() {
     const form = document.getElementById("hotelForm");
     if (!form) return;
 
-    form.addEventListener("submit", function(event) {
+    form.addEventListener("submit", async function(event) {
         event.preventDefault();
 
         const name = document.getElementById("hotelName").value.trim();
@@ -489,6 +570,21 @@ function setupHotelForm() {
         }
 
         const bookingId = generateBookingId("HTL");
+
+        const hotelBackendResult = await saveBookingToBackend({
+            booking_id: bookingId,
+            customer_name: name,
+            mobile: phone,
+            service_type: "Hotel Enquiry",
+            package_name: destination,
+            travel_date: checkIn || null,
+            passengers: Number(guests) || 1,
+            cab_category: "",
+            pickup_location: "",
+            drop_location: "",
+            amount: 0,
+            special_requirement: "Rooms: " + rooms + " | Check-out: " + checkOut + " | Budget/Night: " + (budget || "Any") + " | Requirement: " + (requirement || "None")
+        });
 
         const message =
             "Hello The SR Journey! 👋\n\n" +
@@ -525,9 +621,13 @@ function setupHotelForm() {
             whatsappMessage: message
         });
 
+        showBackendSaveWarning(hotelBackendResult);
+
         const status = document.getElementById("hotelStatus");
         if (status) {
-            status.textContent = "Enquiry created. Enquiry ID: " + bookingId;
+            status.textContent = hotelBackendResult.success
+                ? "Enquiry saved successfully. Enquiry ID: " + bookingId
+                : "Voucher created. Backend save failed. Enquiry ID: " + bookingId;
         }
     });
 }
