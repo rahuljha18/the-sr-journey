@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>The SR Journey - Admin Dashboard</title>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f6f9;
+
+            color: #222;
+
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+
+            background: #023e8a;
+
+            color: white;
+
+            padding: 22px 30px;
+
+        }
+
+        .header h1 {
+
+            margin: 0;
+
+            font-size: 28px;
+
+        }
+
+        .header p {
+
+            margin: 6px 0 0;
+
+            opacity: 0.9;
+
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+
+            max-width: 1250px;
+
+            margin: 30px auto;
+
+            padding: 0 20px;
+
+        }
+
+        /* ================= DATE FILTER ================= */
+
+        .date-filter-section {
+
+            margin-bottom: 25px;
+
+        }
+
+        .date-filter-form {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            align-items: end;
+
+            gap: 15px;
+
+            margin-top: 20px;
+
+        }
+
+        .date-filter-field {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 6px;
+
+        }
+
+        .date-filter-field label {
+
+            font-weight: 600;
+
+        }
+
+        .date-filter-field input {
+
+            padding: 10px 12px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+        }
+
+        .clear-filter-btn {
+
+            display: inline-block;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            background: #6c757d;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+        }
+
+        .clear-filter-btn:hover {
+
+            opacity: 0.9;
+
+        }
+
+        /* ================= STAT CARDS ================= */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+
+        }
+
+        .card {
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+
+            border-left: 5px solid #023e8a;
+
+        }
+
+        .card h3 {
+
+            margin: 0 0 10px;
+
+            font-size: 14px;
+
+            color: #666;
+
+        }
+
+        .number {
+
+            font-size: 30px;
+
+            font-weight: bold;
+
+        }
+
+        .total {
+
+            color: #023e8a;
+
+        }
+
+        .pending {
+
+            color: #f0ad4e;
+
+        }
+
+        .confirmed {
+
+            color: #198754;
+
+        }
+
+        .completed {
+
+            color: #0c7c86;
+
+        }
+
+        .cancelled {
+
+            color: #dc3545;
+
+        }
+
+        .revenue {
+
+            color: #198754;
+
+        }
+
+        .assigned {
+
+            color: #6f42c1;
+
+        }
+
+        .unassigned {
+
+            color: #fd7e14;
+
+        }
+
+        /* ================= SECTION ================= */
+
+        .section {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 25px;
+
+        }
+
+        .section h2 {
+
+            margin-top: 0;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* ================= CHART ================= */
+
+        .chart-box {
+
+            width: 100%;
+
+            max-width: 850px;
+
+            height: 380px;
+
+            margin: 20px auto;
+
+            position: relative;
+
+        }
+
+        .chart-box canvas {
+
+            width: 100% !important;
+
+            height: 100% !important;
+
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-wrapper {
+
+            overflow-x: auto;
+
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 850px;
+
+        }
+
+        th,
+
+        td {
+
+            padding: 13px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #eee;
+
+        }
+
+        th {
+
+            background: #f8f9fa;
+
+            font-size: 13px;
+
+            color: #555;
+
+        }
+
+        td {
+
+            font-size: 14px;
+
+        }
+
+        tr:hover {
+
+            background: #fafcff;
+
+        }
+
+        /* ================= STATUS BADGES ================= */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+        }
+
+        .status-PENDING {
+
+            background: #fff3cd;
+
+            color: #856404;
+
+        }
+
+        .status-CONFIRMED {
+
+            background: #dff5e7;
+
+            color: #176b3a;
+
+        }
+
+        .status-COMPLETED {
+
+            background: #d9edf7;
+
+            color: #0c5460;
+
+        }
+
+        .status-CANCELLED {
+
+            background: #f8d7da;
+
+            color: #842029;
+
+        }
+
+        /* ================= PARTNER ================= */
+
+        .partner-assigned {
+
+            color: #198754;
+
+            font-weight: bold;
+
+        }
+
+        .partner-unassigned {
+
+            color: #dc3545;
+
+            font-weight: bold;
+
+        }
+
+        /* ================= REPORT BUTTONS ================= */
+
+        .report-buttons {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 15px;
+
+            margin-top: 20px;
+
+        }
+
+        .report-btn {
+
+            display: inline-block;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            background: #023e8a;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            transition: 0.2s ease;
+
+            border: none;
+
+            cursor: pointer;
+
+        }
+
+        .report-btn:hover {
+
+            opacity: 0.9;
+
+            transform: translateY(-1px);
+
+        }
+
+        /* ================= LINKS ================= */
+
+        .links {
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+            margin-top: 25px;
+
+        }
+
+        .links a {
+
+            display: inline-block;
+
+            padding: 11px 17px;
+
+            background: #023e8a;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+
+            font-weight: bold;
+
+        }
+
+        .links a:hover {
+
+            opacity: 0.9;
+
+        }
+
+        .admin-link {
+
+            background: #198754 !important;
+
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .cards {
+
+                grid-template-columns: repeat(2, 1fr);
+
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+
+                padding: 18px;
+
+            }
+
+            .header h1 {
+
+                font-size: 23px;
+
+            }
+
+            .container {
+
+                margin: 20px auto;
+
+                padding: 0 12px;
+
+            }
+
+            .cards {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .section {
+
+                padding: 18px;
+
+            }
+
+            .date-filter-form {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+            .date-filter-field input {
+
+                width: 100%;
+
+            }
+
+            .report-btn,
+
+            .clear-filter-btn {
+
+                text-align: center;
+
+            }
+
+            .chart-box {
+
+                height: 300px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="header">
+
+        <h1>
+
+            The SR Journey
+
+        </h1>
+
+        <p>
+
+            Admin Booking Dashboard
+
+        </p>
+
+    </div>
+
+    <div class="container">
+
+        <!-- ================= DATE FILTER ================= -->
+
+        <div class="section date-filter-section">
+
+            <h2>
+
+                📅 Filter Reports by Date
+
+            </h2>
+
+            <form method="get" class="date-filter-form">
+
+                <div class="date-filter-field">
+
+                    <label for="start_date">
+
+                        From Date
+
+                    </label>
+
+                    <input
+
+                        type="date"
+
+                        id="start_date"
+
+                        name="start_date"
+
+                        value="{{ start_date }}"
+
+                    >
+
+                </div>
+
+                <div class="date-filter-field">
+
+                    <label for="end_date">
+
+                        To Date
+
+                    </label>
+
+                    <input
+
+                        type="date"
+
+                        id="end_date"
+
+                        name="end_date"
+
+                        value="{{ end_date }}"
+
+                    >
+
+                </div>
+
+                <button
+
+                    type="submit"
+
+                    class="report-btn"
+
+                >
+
+                    🔍 Apply Filter
+
+                </button>
+
+                <a
+
+                    href="/admin-dashboard/"
+
+                    class="clear-filter-btn"
+
+                >
+
+                    ✖ Clear
+
+                </a>
+
+            </form>
+
+        </div>
+
+        <!-- ================= FILTERED REPORT ================= -->
+
+        <div class="section">
+
+            <h2>
+
+                📊 Filtered Report
+
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+
+                        Filtered Bookings
+
+                    </h3>
+
+                    <div class="number total">
+
+                        {{ filtered_booking_count }}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Filtered Revenue
+
+                    </h3>
+
+                    <div class="number revenue">
+
+                        ₹{{ filtered_revenue }}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Filtered Confirmed
+
+                    </h3>
+
+                    <div class="number confirmed">
+
+                        {{ filtered_confirmed }}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Filtered Completed
+
+                    </h3>
+
+                    <div class="number completed">
+
+                        {{ filtered_completed }}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Filtered Cancelled
+
+                    </h3>
+
+                    <div class="number cancelled">
+
+                        {{ filtered_cancelled }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= PAYMENT SUMMARY ================= -->
+
+        <div class="section">
+
+            <h2>
+
+                💳 Payment Summary
+
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+
+                        Paid Revenue
+
+                    </h3>
+
+                    <div class="number revenue">
+
+                        ₹{{ paid_revenue }}
+
+                    </div>
+
+                    <small>
+
+                        {{ paid_bookings }} Paid Booking(s)
+
+                    </small>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Pending Payment
+
+                    </h3>
+
+                    <div class="number pending">
+
+                        ₹{{ pending_payment }}
+
+                    </div>
+
+                    <small>
+
+                        {{ pending_payment_bookings }} Pending Booking(s)
+
+                    </small>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Failed Payment
+
+                    </h3>
+
+                    <div class="number cancelled">
+
+                        ₹{{ failed_payment }}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Refunded Payment
+
+                    </h3>
+
+                    <div class="number total">
+
+                        ₹{{ refunded_payment }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        
+<!-- ================= COMMISSION SUMMARY ================= -->
+<div class="section">
+    <h2>💰 Commission Summary</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Commission</h3>
+            <div class="number revenue">
+                ₹{{ total_commission|floatformat:2 }}
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Partner Payable</h3>
+            <div class="number total">
+                ₹{{ total_partner_payable|floatformat:2 }}
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Commission on Paid Bookings</h3>
+            <div class="number confirmed">
+                ₹{{ paid_commission|floatformat:2 }}
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- ================= BOOKING STATUS CHART ================= -->
+
+        <div class="section">
+
+            <h2>
+
+                📊 Booking Status Overview
+
+            </h2>
+
+            <div class="chart-box">
+
+                <canvas id="bookingStatusChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <!-- ================= REVENUE CHART ================= -->
+
+        <div class="section">
+
+            <h2>
+
+                💰 Revenue Overview
+
+            </h2>
+
+            <div class="chart-box">
+
+                <canvas id="revenueChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <!-- ================= PARTNER PERFORMANCE CHART ================= -->
+
+        <div class="section">
+
+            <h2>
+
+                🚕 Partner Performance
+
+            </h2>
+
+            {{ partner_chart_labels|json_script:"partner-chart-labels" }}
+
+            {{ partner_chart_bookings|json_script:"partner-chart-bookings" }}
+
+            {{ partner_chart_revenue|json_script:"partner-chart-revenue" }}
+
+            <div class="chart-box">
+
+                <canvas id="partnerPerformanceChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <!-- ================= ROW 1 ================= -->
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>
+
+                    Total Bookings
+
+                </h3>
+
+                <div class="number total">
+
+                    {{ total_bookings }}
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Pending Bookings
+
+                </h3>
+
+                <div class="number pending">
+
+                    {{ pending_bookings }}
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Confirmed Bookings
+
+                </h3>
+
+                <div class="number confirmed">
+
+                    {{ confirmed_bookings }}
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Completed Bookings
+
+                </h3>
+
+                <div class="number completed">
+
+                    {{ completed_bookings }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= ROW 2 ================= -->
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>
+
+                    Cancelled Bookings
+
+                </h3>
+
+                <div class="number cancelled">
+
+                    {{ cancelled_bookings }}
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Total Revenue
+
+                </h3>
+
+                <div class="number revenue">
+
+                    ₹{{ total_revenue }}
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Partner Assigned
+
+                </h3>
+
+                <div class="number assigned">
+
+                    {{ assigned_bookings }}
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Partner Unassigned
+
+                </h3>
+
+                <div class="number unassigned">
+
+                    {{ unassigned_bookings }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= MONTHLY REPORT ================= -->
+
+        <div class="section">
+
+            <h2>
+
+                📊 Current Month Report
+
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+
+                        Current Month Bookings
+
+                    </h3>
+
+                    <div class="number total">
+
+                        {{ current_month_bookings }}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Current Month Revenue
+
+                    </h3>
+
+                    <div class="number revenue">
+
+                        ₹{{ current_month_revenue }}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Month Confirmed
+
+                    </h3>
+
+                    <div class="number confirmed">
+
+                        {{ current_month_confirmed }}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>
+
+                        Month Completed
+
+                    </h3>
+
+                    <div class="number completed">
+
+                        {{ current_month_completed }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= PARTNER PERFORMANCE REPORT ================= -->
+
+        <div class="section">
+
+            <h2>🚕 Partner Performance Report</h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Partner</th>
+
+                            <th>Total Bookings</th>
+
+                            <th>Completed</th>
+
+                            <th>Pending</th>
+
+                            <th>Cancelled</th>
+
+                            <th>Total Booking Amount</th>
+
+                            <th>Paid Amount</th>
+                            
+                            <th>Total Commission</th>
+                            <th>Partner Payable</th>
+                            <th>Total Paid</th>
+                            <th>Pending Balance</th>
+                            <th>Settlement Status</th>
+                            <th>History</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for partner in partner_summary %}
+
+                        <tr>
+
+                            <td><strong>{{ partner.partner__partner_name }}</strong></td>
+
+                            <td>{{ partner.booking_count }}</td>
+
+                            <td>{{ partner.completed_count }}</td>
+
+                            <td>{{ partner.pending_count }}</td>
+
+                            <td>{{ partner.cancelled_count }}</td>
+
+                            <td>₹{{ partner.total_amount|default:0|floatformat:2 }}</td>
+
+                            <td>₹{{ partner.paid_amount|default:0|floatformat:2 }}</td>
+                            
+                            <td>₹{{ partner.total_commission|default:0|floatformat:2 }}</td>
+                            <td>₹{{ partner.total_partner_payable|default:0|floatformat:2 }}</td>
+                            <td>₹{{ partner.settlement_paid|floatformat:2 }}</td>
+                            <td>₹{{ partner.settlement_pending|floatformat:2 }}</td>
+
+                            <td>
+                                {% if partner.settlement_pending <= 0 %}
+                                <span class="status completed">Settled</span>
+                                {% else %}
+                                <span class="status pending">Pending</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+
+                                <a href="{% url 'partner_booking_history' partner.partner__id %}"
+
+                                   target="_blank" rel="noopener noreferrer">
+
+                                    View History
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="13">No partner booking data available.</td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- ================= RECENT BOOKINGS ================= -->
+
+        <div class="section">
+
+            <h2>
+
+                📋 Recent Bookings
+
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+
+                                Booking ID
+
+                            </th>
+
+                            <th>
+
+                                Customer
+
+                            </th>
+
+                            <th>
+
+                                Service
+
+                            </th>
+
+                            <th>
+
+                                Travel Date
+
+                            </th>
+
+                            <th>
+
+                                Amount
+
+                            </th>
+
+                            <th>
+
+                                Partner
+
+                            </th>
+
+                            <th>
+
+                                Status
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for booking in recent_bookings %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+
+                                    {{ booking.booking_id }}
+
+                                </strong>
+
+                            </td>
+
+                            <td>
+
+                                {{ booking.customer_name }}
+
+                            </td>
+
+                            <td>
+
+                                {{ booking.service_type }}
+
+                            </td>
+
+                            <td>
+
+                                {{ booking.travel_date|default:"-" }}
+
+                            </td>
+
+                            <td>
+
+                                ₹{{ booking.amount }}
+
+                            </td>
+
+                            <td>
+
+                                {% if booking.partner %}
+
+                                <span class="partner-assigned">
+
+                                    🚕 {{ booking.partner.partner_name }}
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="partner-unassigned">
+
+                                    ⚠ Unassigned
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <span class="status status-{{ booking.booking_status }}">
+
+                                    {{ booking.booking_status }}
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="7">
+
+                                No bookings found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- ================= EXPORT REPORTS ================= -->
+
+        <div class="section">
+
+            <h2>
+
+                📥 Download Reports
+
+            </h2>
+
+            <div class="report-buttons">
+
+                <a
+
+                    href="/api/reports/bookings/export/"
+
+                    class="report-btn"
+
+                >
+
+                    📊 Download Booking Report
+
+                </a>
+
+                <a
+
+                    href="/api/reports/revenue/export/"
+
+                    class="report-btn"
+
+                >
+
+                    💰 Download Revenue Report
+
+                </a>
+
+                <a
+
+                    href="/api/reports/partners/export/"
+
+                    class="report-btn"
+
+                >
+
+                    🚕 Download Partner Report
+
+                </a>
+
+                
+                <a
+                    href="/api/reports/commissions/export/"
+                    class="report-btn"
+>
+                    💰 Download Commission Report
+                </a>
+
+                
+                <a href="/api/reports/settlements/export/" class="report-btn">
+                    💳 Download Settlement Report
+                </a>
+                
+                <a href="{% url 'partner_payment_dashboard' %}" class="report-btn">
+                    💳 Partner Payment Dashboard
+                </a>
+
+
+            </div>
+
+        </div>
+
+        <!-- ================= QUICK LINKS ================= -->
+
+        <div class="links">
+
+            <a
+
+                href="/admin/"
+
+                class="admin-link"
+
+            >
+
+                ⚙ Django Admin
+
+            </a>
+
+            <a
+
+                href="/api/bookings/"
+
+            >
+
+                📦 Booking API
+
+            </a>
+
+            <a
+
+                href="/api/bookings/track/CAB-261005-8538/"
+
+            >
+
+                🔎 Test Tracking API
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ================================================= -->
+
+    <!-- CHART.JS -->
+
+    <!-- ================================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- ================= BOOKING STATUS CHART ================= -->
+
+    <script>
+
+        const bookingStatusData = {
+
+            pending: {{ pending_bookings }},
+
+            confirmed: {{ confirmed_bookings }},
+
+            completed: {{ completed_bookings }},
+
+            cancelled: {{ cancelled_bookings }}
+
+        };
+
+        const bookingStatusCtx =
+
+            document.getElementById("bookingStatusChart");
+
+        if (bookingStatusCtx) {
+
+            new Chart(
+
+                bookingStatusCtx,
+
+                {
+
+                    type: "doughnut",
+
+                    data: {
+
+                        labels: [
+
+                            "Pending",
+
+                            "Confirmed",
+
+                            "Completed",
+
+                            "Cancelled"
+
+                        ],
+
+                        datasets: [
+
+                            {
+
+                                data: [
+
+                                    bookingStatusData.pending,
+
+                                    bookingStatusData.confirmed,
+
+                                    bookingStatusData.completed,
+
+                                    bookingStatusData.cancelled
+
+                                ]
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+
+                                position: "bottom"
+
+                            },
+
+                            title: {
+
+                                display: true,
+
+                                text: "Booking Status"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+    </script>
+
+    <!-- ================= REVENUE CHART ================= -->
+
+    <script>
+
+        const revenueData = {
+
+            total: {{ filtered_revenue }},
+
+            paid: {{ paid_revenue }},
+
+            pending: {{ pending_payment }}
+
+        };
+
+        const revenueCtx =
+
+            document.getElementById("revenueChart");
+
+        if (revenueCtx) {
+
+            new Chart(
+
+                revenueCtx,
+
+                {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels: [
+
+                            "Total Revenue",
+
+                            "Paid Revenue",
+
+                            "Pending Payment"
+
+                        ],
+
+                        datasets: [
+
+                            {
+
+                                label: "Amount (₹)",
+
+                                data: [
+
+                                    revenueData.total,
+
+                                    revenueData.paid,
+
+                                    revenueData.pending
+
+                                ]
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        scales: {
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    callback: function(value) {
+
+                                        return "₹" + value;
+
+                                    }
+
+                                }
+
+                            }
+
+                        },
+
+                        plugins: {
+
+                            legend: {
+
+                                display: false
+
+                            },
+
+                            title: {
+
+                                display: true,
+
+                                text: "Revenue & Payment Overview"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+    </script>
+
+    <!-- ================= PARTNER PERFORMANCE CHART ================= -->
+
+    <script>
+
+        const partnerLabelsElement =
+
+            document.getElementById("partner-chart-labels");
+
+        const partnerBookingsElement =
+
+            document.getElementById("partner-chart-bookings");
+
+        const partnerRevenueElement =
+
+            document.getElementById("partner-chart-revenue");
+
+        if (
+
+            partnerLabelsElement &&
+
+            partnerBookingsElement &&
+
+            partnerRevenueElement
+
+        ) {
+
+            const partnerLabels =
+
+                JSON.parse(
+
+                    partnerLabelsElement.textContent
+
+                );
+
+            const partnerBookings =
+
+                JSON.parse(
+
+                    partnerBookingsElement.textContent
+
+                );
+
+            const partnerRevenue =
+
+                JSON.parse(
+
+                    partnerRevenueElement.textContent
+
+                );
+
+            const partnerCtx =
+
+                document.getElementById(
+
+                    "partnerPerformanceChart"
+
+                );
+
+            if (partnerCtx) {
+
+                new Chart(
+
+                    partnerCtx,
+
+                    {
+
+                        type: "bar",
+
+                        data: {
+
+                            labels: partnerLabels,
+
+                            datasets: [
+
+                                {
+
+                                    label: "Bookings",
+
+                                    data: partnerBookings
+
+                                },
+
+                                {
+
+                                    label: "Revenue (₹)",
+
+                                    data: partnerRevenue
+
+                                }
+
+                            ]
+
+                        },
+
+                        options: {
+
+                            responsive: true,
+
+                            maintainAspectRatio: false,
+
+                            scales: {
+
+                                y: {
+
+                                    beginAtZero: true
+
+                                }
+
+                            },
+
+                            plugins: {
+
+                                legend: {
+
+                                    position: "bottom"
+
+                                },
+
+                                title: {
+
+                                    display: true,
+
+                                    text:
+
+                                        "Partner-wise Booking & Revenue"
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                );
+
+            }
+
+        }
+
+</script>
+
+</body>
+
+</html>

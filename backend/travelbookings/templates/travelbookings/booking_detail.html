@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Booking Details - The SR Journey</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        .header {
+            background: #023e8a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .booking-header {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .booking-header h2 {
+            margin: 0 0 8px;
+            color: #023e8a;
+        }
+
+        .booking-id {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .section {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .section h3 {
+            margin-top: 0;
+            color: #023e8a;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .detail-box {
+            background: #f7f9fc;
+            padding: 14px;
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .paid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .payment-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .partner-box {
+            background: #eef6ff;
+            border-left: 5px solid #023e8a;
+            padding: 18px;
+            border-radius: 8px;
+        }
+
+        .amount {
+            font-size: 24px;
+            color: #023e8a;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn {
+            text-decoration: none;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #023e8a;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-success {
+            background: #198754;
+            color: white;
+        }
+
+        @media (max-width: 700px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+
+        @media print {
+            .actions {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section,
+            .booking-header {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+        .btn-warning {
+    background: #ffc107;
+    color: #212529;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+.btn-whatsapp {
+    background: #25D366;
+    color: white;
+}
+
+.btn-whatsapp:hover {
+    opacity: 0.9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>THE SR JOURNEY</h1>
+    <p>Tours & Travels - Booking Details</p>
+</div>
+
+<div class="container">
+
+    <!-- BOOKING HEADER -->
+
+    <div class="booking-header">
+
+        <h2>Booking Details</h2>
+
+        <div class="booking-id">
+            Booking ID:
+            {{ booking.booking_id }}
+        </div>
+
+        <div class="actions">
+
+            <button
+                class="btn btn-primary"
+                onclick="window.print()">
+                🖨️ Print Booking
+            </button>
+
+            <a
+                href="/admin/"
+                class="btn btn-secondary">
+                ← Back to Admin
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOMER INFORMATION -->
+
+    <div class="section">
+
+        <h3>👤 Customer Information</h3>
+
+        <div class="details-grid">
+
+            <div class="detail-box">
+                <span class="detail-label">
+                    Customer Name
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.customer_name }}
+                </span>
+            </div>
+
+
+            <div class="detail-box">
+                <span class="detail-label">
+                    Mobile Number
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.mobile }}
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOOKING INFORMATION -->
+
+    <div class="section">
+
+        <h3>📋 Booking Information</h3>
+
+        <div class="details-grid">
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Service Type
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.service_type }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Package
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.package_name|default:"-" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Travel Date
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.travel_date|default:"-" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Passengers
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.passengers }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Cab Category
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.cab_category|default:"-" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Amount
+                </span>
+
+                <span class="amount">
+                    ₹{{ booking.amount }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TRAVEL INFORMATION -->
+
+    <div class="section">
+
+        <h3>🚕 Travel Information</h3>
+
+        <div class="details-grid">
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Pickup Location
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.pickup_location|default:"-" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Drop Location
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.drop_location|default:"-" }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENT & STATUS -->
+
+    <div class="section">
+
+        <h3>💳 Payment & Booking Status</h3>
+
+        <div class="details-grid">
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Payment Status
+                </span>
+
+                <span class="detail-value">
+
+                    {% if booking.payment_status == "PAID" %}
+
+                        <span class="status paid">
+                            PAID
+                        </span>
+
+                    {% elif booking.payment_status == "PENDING" %}
+
+                        <span class="status payment-pending">
+                            PENDING
+                        </span>
+
+                    {% else %}
+
+                        <span class="status">
+                            {{ booking.payment_status }}
+                        </span>
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Booking Status
+                </span>
+
+                <span class="detail-value">
+
+                    {% if booking.booking_status == "CONFIRMED" %}
+
+                        <span class="status confirmed">
+                            CONFIRMED
+                        </span>
+
+                    {% elif booking.booking_status == "COMPLETED" %}
+
+                        <span class="status completed">
+                            COMPLETED
+                        </span>
+
+                    {% elif booking.booking_status == "CANCELLED" %}
+
+                        <span class="status cancelled">
+                            CANCELLED
+                        </span>
+
+                    {% else %}
+
+                        <span class="status pending">
+                            PENDING
+                        </span>
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="actions">
+
+    {% if booking.payment_status != "PAID" %}
+    <form
+        method="POST"
+        action="{% url 'payment_action' booking.booking_id 'PAID' %}"
+        style="display:inline;">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn btn-success"
+            onclick="return confirm('Mark payment as PAID?');">
+
+            💰 Mark Paid
+
+        </button>
+    </form>
+    {% endif %}
+
+
+    {% if booking.payment_status != "PENDING" %}
+    <form
+        method="POST"
+        action="{% url 'payment_action' booking.booking_id 'PENDING' %}"
+        style="display:inline;">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn btn-warning"
+            onclick="return confirm('Change payment status to PENDING?');">
+
+            ⏳ Mark Pending
+
+        </button>
+    </form>
+    {% endif %}
+
+
+    {% if booking.payment_status != "FAILED" %}
+    <form
+        method="POST"
+        action="{% url 'payment_action' booking.booking_id 'FAILED' %}"
+        style="display:inline;">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn btn-danger"
+            onclick="return confirm('Mark payment as FAILED?');">
+
+            ❌ Mark Failed
+
+        </button>
+    </form>
+    {% endif %}
+
+
+    {% if booking.payment_status != "REFUNDED" %}
+    <form
+        method="POST"
+        action="{% url 'payment_action' booking.booking_id 'REFUNDED' %}"
+        style="display:inline;">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn btn-secondary"
+            onclick="return confirm('Mark payment as REFUNDED?');">
+
+            🔄 Mark Refunded
+
+        </button>
+    </form>
+    {% endif %}
+
+</div>
+    <!-- PARTNER INFORMATION -->
+
+    <div class="section">
+
+        <h3>🚗 Partner / Driver Information</h3>
+        <form
+    method="POST"
+    action="{% url 'assign_partner' booking.booking_id %}"
+    style="margin-bottom:20px;">
+
+    {% csrf_token %}
+
+    <label
+        for="partner_id"
+        style="display:block; font-weight:bold; margin-bottom:8px;">
+        🚕 Assign / Change Partner
+    </label>
+
+    <select
+        name="partner_id"
+        id="partner_id"
+        style="
+            width:100%;
+            max-width:500px;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:7px;
+            margin-bottom:10px;
+        ">
+
+        <option value="">
+            -- Unassign Partner --
+        </option>
+
+        {% for partner in partners %}
+
+            <option
+                value="{{ partner.id }}"
+                {% if booking.partner and booking.partner.id == partner.id %}
+                    selected
+                {% endif %}
+            >
+
+                {{ partner.partner_name }}
+                -
+                {{ partner.vehicle_number }}
+                -
+                {{ partner.cab_category }}
+
+            </option>
+
+        {% endfor %}
+
+    </select>
+
+    <br>
+
+    <button
+        type="submit"
+        class="btn btn-primary">
+
+        🚕 Assign Partner
+
+    </button>
+
+</form>
+
+        {% if booking.partner %}
+
+            <div class="partner-box">
+
+                <div class="details-grid">
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Partner Name
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.partner.partner_name }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Company
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.partner.company_name|default:"-" }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Driver Name
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.partner.driver_name }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Driver Mobile
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.partner.driver_mobile }}
+                        </span>
+
+                    </div>
+                    <div class="actions">
+
+    {% if booking.partner.driver_mobile %}
+
+        <a
+            href="tel:{{ booking.partner.driver_mobile }}"
+            class="btn btn-success">
+
+            📞 Call Driver
+
+        </a>
+
+        <a
+            href="https://wa.me/{{ booking.partner.driver_mobile }}"
+            target="_blank"
+            class="btn btn-whatsapp">
+
+            💬 WhatsApp Driver
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Vehicle Number
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.partner.vehicle_number }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Cab Category
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.partner.cab_category }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% else %}
+
+            <p>
+                ⚠️ No partner has been assigned to this booking yet.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- SPECIAL REQUIREMENT -->
+
+    <div class="section">
+
+        <h3>📝 Special Requirement</h3>
+
+        <p>
+            {{ booking.special_requirement|default:"No special requirement provided." }}
+        </p>
+
+    </div>
+
+
+    <!-- SYSTEM INFORMATION -->
+
+    <div class="section">
+
+        <h3>⚙️ System Information</h3>
+
+        <div class="details-grid">
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Booking Created
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.created_at }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

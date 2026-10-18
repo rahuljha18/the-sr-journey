@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Payment Dashboard | The SR Journey</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 25px;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: auto;
+        }
+
+        .header, .summary, .table-container {
+            background: white;
+            padding: 22px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: #f0f7f2;
+            padding: 18px;
+            border-radius: 8px;
+        }
+
+        .card h3 {
+            font-size: 15px;
+            margin-top: 0;
+        }
+
+        .amount {
+            font-size: 25px;
+            font-weight: bold;
+            color: #176b42;
+            overflow-wrap: anywhere;
+        }
+
+        .pending {
+            color: #b45309;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #176b42;
+            color: white;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 14px;
+            background: #176b42;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 3px;
+        }
+
+        .secondary {
+            background: #444;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media (max-width: 750px) {
+            body {
+                padding: 12px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            .actions {
+                display: none;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .header, .summary, .table-container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>The SR Journey</h1>
+        <h2>Partner Payment Dashboard</h2>
+        <p>Partner-wise payable amount, payments and outstanding balance.</p>
+
+        <div class="actions">
+            <a href="{% url 'settlement_history' %}" class="button">
+                Settlement History
+            </a>
+
+            <a href="{% url 'export_settlement_report' %}" class="button">
+                Download Settlement Excel
+            </a>
+
+            <a href="/admin/" class="button secondary">
+                Back to Admin
+            </a>
+
+            <button class="button secondary" onclick="window.print()">
+                Print Dashboard
+            </button>
+        </div>
+    </div>
+
+    <div class="summary">
+        <div class="card">
+            <h3>Total Partner Payable</h3>
+            <div class="amount">
+                ₹{{ grand_total_payable|floatformat:2 }}
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Total Amount Paid</h3>
+            <div class="amount">
+                ₹{{ grand_total_paid|floatformat:2 }}
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Overall Pending Balance</h3>
+            <div class="amount pending">
+                ₹{{ grand_total_pending|floatformat:2 }}
+            </div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <h2>Partner Payment Summary</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Partner</th>
+                    <th>Vehicle Number</th>
+                    <th>Total Payable</th>
+                    <th>Total Paid</th>
+                    <th>Pending Balance</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in partner_data %}
+                <tr>
+                    <td>{{ item.partner.partner_name }}</td>
+                    <td>{{ item.partner.vehicle_number }}</td>
+                    <td>₹{{ item.total_payable|floatformat:2 }}</td>
+                    <td>₹{{ item.total_paid|floatformat:2 }}</td>
+                    <td>₹{{ item.pending_balance|floatformat:2 }}</td>
+
+                    <td>
+                        {% if item.pending_balance < 0 %}
+                            <span class="status pending">Overpaid</span>
+                        {% elif item.pending_balance == 0 %}
+                            <span class="status">Settled</span>
+                        {% else %}
+                            <span class="status pending">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <a
+                            href="{% url 'settlement_history' %}?partner={{ item.partner.id }}"
+                            class="button"
+                        >
+                            View Payments
+                        </a>
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty">
+                        No partners found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

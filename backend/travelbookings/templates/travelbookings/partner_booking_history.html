@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Booking History | The SR Journey</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #243047;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .header {
+            background: #023e8a;
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+        }
+
+        .header p {
+            margin: 6px 0;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0000000d;
+        }
+
+        .card h3 {
+            margin: 0 0 12px;
+            font-size: 14px;
+            color: #68758a;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 25px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .table-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            padding: 13px;
+            border-bottom: 1px solid #e5eaf1;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #edf3fa;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .back-btn, .print-btn {
+            display: inline-block;
+            margin-top: 16px;
+            margin-right: 8px;
+            padding: 11px 16px;
+            background: #023e8a;
+            color: white;
+            border: 0;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .empty {
+            padding: 24px;
+            text-align: center;
+            color: #68758a;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .back-btn, .print-btn {
+                display: none;
+            }
+
+            .card, .table-box {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>THE SR JOURNEY</h1>
+        <h2>Partner Booking History</h2>
+
+        <p>
+            <strong>Partner:</strong>
+            {{ partner.partner_name }}
+        </p>
+
+        <p>
+            <strong>Company:</strong>
+            {{ partner.company_name|default:"N/A" }}
+        </p>
+
+        <p>
+            <strong>Vehicle:</strong>
+            {{ partner.vehicle_number }}
+        </p>
+
+        <p>
+            <strong>Driver:</strong>
+            {{ partner.driver_name }}
+        </p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Bookings</h3>
+            <p>{{ total_bookings }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Completed Bookings</h3>
+            <p>{{ completed_bookings }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Pending Bookings</h3>
+            <p>{{ pending_bookings }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Booking Amount</h3>
+            <p>₹{{ total_revenue|floatformat:2 }}</p>
+        </div>
+    </div>
+
+    <div class="table-box">
+        <h2>Booking Details</h2>
+
+        {% if bookings %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Mobile</th>
+                    <th>Service</th>
+                    <th>Travel Date</th>
+                    <th>Passengers</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Booking Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.booking_id }}</td>
+                    <td>{{ booking.customer_name }}</td>
+                    <td>{{ booking.mobile }}</td>
+                    <td>{{ booking.service_type }}</td>
+                    <td>{{ booking.travel_date|default:"N/A" }}</td>
+                    <td>{{ booking.passengers }}</td>
+                    <td>₹{{ booking.amount|floatformat:2 }}</td>
+                    <td class="status">{{ booking.payment_status }}</td>
+                    <td class="status">{{ booking.booking_status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty">
+            No bookings have been assigned to this partner yet.
+        </div>
+        {% endif %}
+    </div>
+
+    <button class="print-btn" onclick="window.print()">
+        Print / Save PDF
+    </button>
+
+    <a class="back-btn" href="/admin/travelbookings/partner/">
+        Back to Partners
+    </a>
+
+</div>
+</body>
+</html>
