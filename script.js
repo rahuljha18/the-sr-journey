@@ -753,3 +753,320 @@ document.addEventListener("DOMContentLoaded", function() {
         if (event.key === "Escape") closeBookingVoucher();
     });
 });
+/* =========================================
+   PHASE 3.6.6 - BOOKING TRACKING
+   ========================================= */
+
+const API_BASE_URL = "http://127.0.0.1:8000/api";
+
+
+async function trackBooking() {
+
+    const input = document.getElementById("trackingBookingId");
+    const message = document.getElementById("trackingMessage");
+    const result = document.getElementById("trackingResult");
+
+    if (!input || !message || !result) {
+        return;
+    }
+
+    const bookingId = input.value.trim();
+
+    message.textContent = "";
+    result.hidden = true;
+
+    if (!bookingId) {
+
+        message.textContent =
+            "Please enter your Booking ID.";
+
+        return;
+    }
+
+    message.textContent =
+        "Checking booking details...";
+
+    try {
+
+        const response = await fetch(
+            API_BASE_URL +
+            "/bookings/track/" +
+            encodeURIComponent(bookingId) +
+            "/"
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            message.textContent =
+                data.message || "Booking not found.";
+
+            return;
+        }
+
+        /* =========================
+           BASIC BOOKING DETAILS
+           ========================= */
+
+        document.getElementById("trackBookingId").textContent =
+            data.booking_id || "-";
+
+        document.getElementById("trackCustomer").textContent =
+            data.customer_name || "-";
+
+        document.getElementById("trackService").textContent =
+            data.service_type || "-";
+
+        document.getElementById("trackPackage").textContent =
+            data.package_name || "-";
+
+        document.getElementById("trackTravelDate").textContent =
+            data.travel_date || "-";
+
+        document.getElementById("trackPassengers").textContent =
+            data.passengers || "-";
+
+        document.getElementById("trackCab").textContent =
+            data.cab_category || "-";
+
+        document.getElementById("trackPaymentStatus").textContent =
+            data.payment_status || "-";
+
+        document.getElementById("trackBookingStatus").textContent =
+            data.booking_status || "-";
+
+        const statusElement =
+        document.getElementById("trackBookingStatus");
+
+        statusElement.classList.remove(
+        "status-confirmed",
+        "status-pending",
+        "status-completed",
+        "status-cancelled"
+);
+
+const bookingStatus =
+    (data.booking_status || "").toUpperCase();
+
+if (bookingStatus === "CONFIRMED") {
+
+    statusElement.classList.add("status-confirmed");
+
+} else if (bookingStatus === "PENDING") {
+
+    statusElement.classList.add("status-pending");
+
+} else if (bookingStatus === "COMPLETED") {
+
+    statusElement.classList.add("status-completed");
+
+} else if (bookingStatus === "CANCELLED") {
+
+    statusElement.classList.add("status-cancelled");
+
+}
+
+
+        /* =========================
+           PARTNER / DRIVER DETAILS
+           ========================= */
+
+        const partnerBox =
+            document.getElementById("trackPartnerBox");
+
+        if (data.partner) {
+
+            partnerBox.hidden = false;
+
+            document.getElementById("trackPartner").textContent =
+                data.partner.partner_name || "-";
+
+            document.getElementById("trackDriver").textContent =
+                data.partner.driver_name || "-";
+
+            document.getElementById("trackDriverMobile").textContent =
+                data.partner.driver_mobile || "-";
+const driverMobile =
+    data.partner.driver_mobile || "";
+
+const driverMobileBox =
+    document
+        .getElementById("trackDriverMobile")
+        .parentElement;
+
+
+// ==========================================
+// CALL DRIVER
+// ==========================================
+
+let callButton =
+    document.getElementById("driverCallButton");
+
+if (!callButton) {
+
+    callButton = document.createElement("a");
+
+    callButton.id = "driverCallButton";
+
+    callButton.className =
+        "driver-call-btn";
+
+    callButton.textContent =
+        "📞 Call Driver";
+
+    callButton.target = "_self";
+
+    driverMobileBox.appendChild(
+        callButton
+    );
+}
+
+
+// ==========================================
+// WHATSAPP DRIVER
+// ==========================================
+
+let whatsappButton =
+    document.getElementById(
+        "driverWhatsAppButton"
+    );
+
+if (!whatsappButton) {
+
+    whatsappButton =
+        document.createElement("a");
+
+    whatsappButton.id =
+        "driverWhatsAppButton";
+
+    whatsappButton.className =
+        "driver-whatsapp-btn";
+
+    whatsappButton.textContent =
+        "💬 WhatsApp Driver";
+
+    whatsappButton.target =
+        "_blank";
+
+    whatsappButton.rel =
+        "noopener";
+
+    driverMobileBox.appendChild(
+        whatsappButton
+    );
+}
+
+
+// ==========================================
+// DRIVER MOBILE
+// ==========================================
+
+if (driverMobile) {
+
+    let cleanNumber =
+        driverMobile.replace(/\D/g, "");
+
+
+    // Add India country code
+    // if 10-digit Indian mobile number
+    if (
+        cleanNumber.length === 10 &&
+        /^[6-9]/.test(cleanNumber)
+    ) {
+        cleanNumber =
+            "91" + cleanNumber;
+    }
+
+
+    // Call Driver
+    callButton.href =
+        "tel:+" + cleanNumber;
+
+    callButton.hidden = false;
+
+
+    // WhatsApp Driver
+    whatsappButton.href =
+        "https://wa.me/" +
+        cleanNumber +
+        "?text=" +
+        encodeURIComponent(
+            "Hello, I am contacting you regarding my The SR Journey booking."
+        );
+
+    whatsappButton.hidden = false;
+
+} else {
+
+    callButton.hidden = true;
+
+    whatsappButton.hidden = true;
+}
+
+            document.getElementById("trackVehicle").textContent =
+                data.partner.vehicle_number || "-";
+
+        } else {
+
+            partnerBox.hidden = true;
+
+        }
+
+
+        /* =========================
+           SHOW RESULT
+           ========================= */
+
+        message.textContent =
+            "Booking details found successfully.";
+
+        result.hidden = false;
+
+    } catch (error) {
+
+        console.error(
+            "Booking tracking error:",
+            error
+        );
+
+        message.textContent =
+            "Unable to connect to booking server. " +
+            "Please try again.";
+
+    }
+}
+
+
+/* =========================
+   ENTER KEY SUPPORT
+   ========================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const input =
+            document.getElementById(
+                "trackingBookingId"
+            );
+
+        if (input) {
+
+            input.addEventListener(
+                "keypress",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        trackBooking();
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);

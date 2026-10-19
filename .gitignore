@@ -16,3 +16,12 @@ env/
 *.backup
 # Local development files
 .vscode/
+# Additional Django local settings and secrets
+backend/**/settings_local.py
+backend/**/.env
+backend/**/secrets.py
+# Backend local files
+backend/venv/
+backend/db.sqlite3
+backend/**/__pycache__/
+backend/**/*.pyc

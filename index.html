@@ -46,6 +46,7 @@
             <a href="#services">Services</a>
             <a href="#gallery">Gallery</a>
             <a href="#about">About</a>
+            <a href="#tracking">Track Booking</a>
             <a href="#contact">Contact</a>
 
         </nav>
@@ -1257,7 +1258,156 @@
 
     </section>
 
+    <!-- ================= BOOKING TRACKING ================= -->
 
+<section id="tracking" class="section tracking-section">
+
+    <div class="section-title">
+
+        <p>BOOKING TRACKING</p>
+
+        <h2>Track Your Booking</h2>
+
+        <span>
+            Enter your Booking ID to check your booking status.
+        </span>
+
+    </div>
+
+    <div class="tracking-container">
+
+        <div class="tracking-card">
+
+            <h3>🔎 Booking Status</h3>
+
+            <p class="tracking-help">
+                Enter the Booking ID received after your booking request.
+            </p>
+
+            <div class="tracking-form">
+
+                <input
+                    type="text"
+                    id="trackingBookingId"
+                    placeholder="Example: SRJ-XXXXXXXX"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    class="btn primary-btn"
+                    onclick="trackBooking()"
+                >
+                    Track Booking
+                </button>
+
+            </div>
+
+            <div
+                id="trackingMessage"
+                class="tracking-message"
+            ></div>
+
+            <!-- TRACKING RESULT -->
+
+            <div
+                id="trackingResult"
+                class="tracking-result"
+                hidden
+            >
+
+                <div class="tracking-status">
+                    <span>Booking Status</span>
+                    <strong id="trackBookingStatus">-</strong>
+                </div>
+
+                <div class="tracking-grid">
+
+                    <div>
+                        <small>Booking ID</small>
+                        <strong id="trackBookingId">-</strong>
+                    </div>
+
+                    <div>
+                        <small>Customer</small>
+                        <strong id="trackCustomer">-</strong>
+                    </div>
+
+                    <div>
+                        <small>Service</small>
+                        <strong id="trackService">-</strong>
+                    </div>
+
+                    <div>
+                        <small>Package</small>
+                        <strong id="trackPackage">-</strong>
+                    </div>
+
+                    <div>
+                        <small>Travel Date</small>
+                        <strong id="trackTravelDate">-</strong>
+                    </div>
+
+                    <div>
+                        <small>Passengers</small>
+                        <strong id="trackPassengers">-</strong>
+                    </div>
+
+                    <div>
+                        <small>Cab Category</small>
+                        <strong id="trackCab">-</strong>
+                    </div>
+
+                    <div>
+                        <small>Payment Status</small>
+                        <strong id="trackPaymentStatus">-</strong>
+                    </div>
+
+                </div>
+
+                <!-- PARTNER DETAILS -->
+
+                <div
+                    id="trackPartnerBox"
+                    class="tracking-partner"
+                    hidden
+                >
+
+                    <h3>🚕 Driver & Vehicle Details</h3>
+
+                    <div class="tracking-grid">
+
+                        <div>
+                            <small>Partner</small>
+                            <strong id="trackPartner">-</strong>
+                        </div>
+
+                        <div>
+                            <small>Driver</small>
+                            <strong id="trackDriver">-</strong>
+                        </div>
+
+                        <div>
+                            <small>Driver Mobile</small>
+                            <strong id="trackDriverMobile">-</strong>
+                        </div>
+
+                        <div>
+                            <small>Vehicle Number</small>
+                            <strong id="trackVehicle">-</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
     <!-- ================= CONTACT ================= -->
 
     <section id="contact" class="section contact-section">

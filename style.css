@@ -1696,3 +1696,209 @@ button {
         page-break-inside: avoid !important;
     }
 }
+/* =========================================
+   BOOKING TRACKING
+   ========================================= */
+
+.tracking-section {
+    background: #f8fbff;
+}
+
+.tracking-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.tracking-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.tracking-card h3 {
+    margin-bottom: 8px;
+}
+
+.tracking-help {
+    color: #667085;
+    margin-bottom: 20px;
+}
+
+.tracking-form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.tracking-form input {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid #ccd6e0;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.tracking-message {
+    margin: 15px 0;
+    font-weight: 600;
+}
+
+.tracking-result {
+    margin-top: 25px;
+}
+
+.tracking-status {
+    padding: 18px;
+    background: #eef6ff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tracking-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.tracking-grid > div {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.tracking-grid small {
+    display: block;
+    color: #667085;
+    margin-bottom: 5px;
+}
+
+.tracking-grid strong {
+    display: block;
+}
+
+.tracking-partner {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.tracking-partner h3 {
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+
+    .tracking-form {
+        flex-direction: column;
+    }
+
+    .tracking-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tracking-status {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+}
+/* =========================================
+   PHASE 3.6.6 - TRACKING UI POLISH
+   ========================================= */
+
+.tracking-message {
+    padding: 10px 0;
+    color: #176b3a;
+}
+
+.tracking-status strong {
+    padding: 7px 14px;
+    border-radius: 20px;
+    background: #dff5e7;
+    color: #176b3a;
+}
+
+/* Driver & Vehicle Card */
+
+.tracking-partner {
+    margin-top: 30px;
+    padding: 22px;
+    border-radius: 12px;
+    background: #f7fbff;
+    border: 1px solid #d8e8f5;
+}
+
+.tracking-partner h3 {
+    color: #023e8a;
+}
+
+/* Driver mobile button */
+
+.driver-call-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 14px;
+    border-radius: 7px;
+    background: #198754;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.driver-call-btn:hover {
+    opacity: 0.9;
+}
+
+/* Booking Status Colors */
+
+.status-confirmed {
+    background: #dff5e7 !important;
+    color: #176b3a !important;
+}
+
+.status-pending {
+    background: #fff3cd !important;
+    color: #856404 !important;
+}
+
+.status-completed {
+    background: #d9edf7 !important;
+    color: #0c5460 !important;
+}
+
+.status-cancelled {
+    background: #f8d7da !important;
+    color: #842029 !important;
+}
+
+.driver-call-btn,
+.driver-whatsapp-btn {
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 8px;
+    padding: 9px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.driver-call-btn {
+    background: #023e8a;
+    color: white;
+}
+
+.driver-whatsapp-btn {
+    background: #25D366;
+    color: white;
+}
+
+.driver-call-btn:hover,
+.driver-whatsapp-btn:hover {
+    opacity: 0.9;
+}
